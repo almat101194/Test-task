@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class MyAdapter(private val comList: HashMap<String, Int>): RecyclerView.Adapter<MyAdapter.MyViewHolder>(), Filterable {
+class MyAdapter(private val comList: HashMap<String, Int>, private val listener: OnItemClickListener): RecyclerView.Adapter<MyAdapter.MyViewHolder>(), Filterable {
 
     val list: List<Pair<String, Int>> = comList.toList()
     var cloneList = HashMap<String, Int>().toList()
@@ -35,9 +35,24 @@ class MyAdapter(private val comList: HashMap<String, Int>): RecyclerView.Adapter
 
     override fun getItemCount() = cloneList.size
 
-    class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val firstText: TextView = itemView.findViewById(R.id.firstText)
         val secText: TextView = itemView.findViewById(R.id.secText)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position)
+            }
+        }
+    }
+
+    interface OnItemClickListener{
+        fun onItemClick(position: Int)
     }
 
     override fun getFilter(): Filter {
