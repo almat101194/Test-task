@@ -15,7 +15,12 @@ import kotlin.collections.HashMap
 class MyAdapter(private val comList: HashMap<String, Int>): RecyclerView.Adapter<MyAdapter.MyViewHolder>(), Filterable {
 
     val list: List<Pair<String, Int>> = comList.toList()
-    var cloneList = comList.toList()
+    var cloneList = HashMap<String, Int>().toList()
+    init {
+        cloneList = comList.toList()
+    }
+//    var cloneList = comList.toList()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
