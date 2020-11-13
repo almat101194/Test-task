@@ -13,6 +13,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var toSort: Button
     lateinit var toRev: Button
     lateinit var recyclerView: RecyclerView
+    lateinit var toSearch: SearchView
+    lateinit var adapter: MyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +22,11 @@ class MainActivity : AppCompatActivity() {
         var data: Data = getDataFromDb()
         var view = MainActivity()
         var controller = Controller(data, view)
-
+        adapter = MyAdapter(controller.getAllData())
 
         toSort = findViewById(R.id.toSort)
         toRev = findViewById(R.id.toReverse)
+        toSearch = findViewById(R.id.item_search)
 
         displayTable(controller.getAllData())
 
@@ -34,6 +37,17 @@ class MainActivity : AppCompatActivity() {
         toRev.setOnClickListener{
             revArr(controller.getAllData())
         }
+
+        toSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                adapter.filter.filter(p0)
+                return false
+            }
+        })
 
     }
 
